@@ -1,16 +1,31 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const passport = require("passport");
+const session = require("express-session");
 require("dotenv").config();
 
+require("./config/Passport")(passport);
+
 const ArticleRouter = require("./router/ArticleRouter");
+const AuthRouter = require("./router/AuthRouter");
 
 const app = express();
 
 app.use("/uploads", express.static("uploads"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/api/articles", ArticleRouter);
+app.use("/auth", AuthRouter);
 
 const port = process.env.PORT || 3000;
 mongoose
