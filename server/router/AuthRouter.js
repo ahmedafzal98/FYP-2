@@ -1,26 +1,19 @@
 const express = require("express");
 const passport = require("passport");
 const router = express.Router();
+const admin = require("../config/firebase-config");
+const UserModel = require("../model/UserModel");
 
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
-router.get(
-  "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/" }),
-  (req, res) => {
-    res.send("Dashboard");
+router.post("/", async (req, res) => {
+  const { token, userData } = req.body;
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    const user = await UserModel.create(userData);
+    res.status(200).json({ message: "User Successfully LoggedIn", user: user });
+    console.log(decodedToken);
+  } catch (error) {
+    console.log(error.message);
   }
-);
-
-router.get("/logout", (req, res, next) => {
-  req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/");
-  });
 });
 
 module.exports = router;

@@ -1,0 +1,44 @@
+import { auth, provider } from "./config/firebase-config";
+import { signInWithPopup } from "firebase/auth";
+import "firebase/auth";
+import "./App.css";
+import { useEffect } from "react";
+
+function App() {
+  useEffect(() => {
+    const auth = localStorage.getItem("auth");
+    console.log(auth);
+  }, []);
+
+  const handleLogin = async () => {
+    try {
+      const data = await signInWithPopup(auth, provider);
+      const token = await data.user.getIdToken();
+      const email = data.user.email;
+      localStorage.setItem("auth", email);
+      const response = await fetch("http://localhost:3000/api/auth", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token,
+          userData: {
+            uid: data.user.uid,
+            name: data.user.displayName,
+            email: data.user.email,
+            photoUrl: data.user.photoURL,
+          },
+        }),
+      });
+      if (response.ok) {
+        console.log(response);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  return <button onClick={handleLogin}>Login with google</button>;
+}
+
+export default App;
