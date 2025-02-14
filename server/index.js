@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");
 const cors = require("cors");
-const admin = require("./config/firebase-config");
 require("dotenv").config();
 
 // require("./config/Passport")(passport);
