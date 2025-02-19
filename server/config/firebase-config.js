@@ -1,3 +1,4 @@
+const { log } = require("console");
 const admin = require("firebase-admin");
 const path = require("path");
 require("dotenv").config();
