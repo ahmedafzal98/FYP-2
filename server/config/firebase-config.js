@@ -3,9 +3,11 @@ const path = require("path");
 require("dotenv").config();
 
 const serviceAccount = JSON.parse(
-  Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT_KEY_PATH, "base64")
+  Buffer.from(
+    process.env.FIREBASE_SERVICE_ACCOUNT_KEY_BASE64,
+    "base64"
+  ).toString("utf8")
 );
-
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
