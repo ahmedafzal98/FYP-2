@@ -5,6 +5,7 @@ import "./App.css";
 import { useEffect } from "react";
 
 function App() {
+  const base_url = import.meta.env.VITE_BASE_URL;
   useEffect(() => {
     const auth = localStorage.getItem("auth");
     console.log(auth);
@@ -16,7 +17,7 @@ function App() {
       const token = await data.user.getIdToken();
       const email = data.user.email;
       localStorage.setItem("auth", email);
-      const response = await fetch("http://localhost:3000/api/auth", {
+      const response = await fetch(base_url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
