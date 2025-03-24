@@ -3,6 +3,8 @@ import { signInWithPopup } from "firebase/auth";
 import "firebase/auth";
 import "./App.css";
 import { useEffect } from "react";
+import { BrowserRouter, Route, Routes } from "react-router";
+import Home from "./pages/Home";
 
 function App() {
   const base_url = import.meta.env.VITE_BASE_URL;
@@ -39,7 +41,13 @@ function App() {
       console.log(error.message);
     }
   };
-  return <button onClick={handleLogin}>Login with google</button>;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
