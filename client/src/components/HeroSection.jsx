@@ -1,9 +1,16 @@
+import { useState } from "react";
 import ActionButton from "./ActionButton";
+import AuthModal from "./AuthModal";
 import Seperator from "./Sepeartor";
 
 const HeroSection = () => {
+  const [isOpenModal, setIsOpenModal] = useState(false);
   return (
     <>
+      <AuthModal
+        isOpen={isOpenModal}
+        closeModal={() => setIsOpenModal(false)}
+      />
       <Seperator />
       <main className="relative bg-banner flex justify-between items-center h-[81vh]">
         <div className="ml-12">
@@ -19,6 +26,7 @@ const HeroSection = () => {
               width="196"
               height="46"
               fontSize="20"
+              onClick={() => setIsOpenModal(true)}
             />
           </div>
         </div>

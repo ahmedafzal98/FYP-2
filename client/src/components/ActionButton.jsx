@@ -1,6 +1,7 @@
-const ActionButton = ({ title, width, height, fontSize }) => {
+const ActionButton = ({ title, width, height, fontSize, onClick }) => {
   return (
     <div
+      onClick={onClick}
       className="cursor-pointer flex justify-center items-center rounded-3xl bg-black text-button-text"
       style={{
         height: `${height}px`,
