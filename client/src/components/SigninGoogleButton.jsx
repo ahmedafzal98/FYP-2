@@ -1,8 +1,11 @@
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import app from "../config/firebase-config";
 import googleIcon from "../assets/google-icon.png";
+import { useNavigate } from "react-router";
 
 const SigninGoogleButton = () => {
+  const navigate = useNavigate();
+
   const signinWithGoogle = async () => {
     try {
       const BASE_URL = import.meta.env.BASE_URL;
@@ -25,8 +28,9 @@ const SigninGoogleButton = () => {
 
       const data = await res.json();
       console.log(data);
+      navigate("/topics");
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
   return (
