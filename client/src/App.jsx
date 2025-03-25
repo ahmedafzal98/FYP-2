@@ -1,4 +1,4 @@
-import { auth, provider } from "./config/firebase-config";
+// import { auth, provider } from "./config/firebase-config";
 import { signInWithPopup } from "firebase/auth";
 import "firebase/auth";
 import "./App.css";
@@ -8,10 +8,10 @@ import Home from "./pages/Home";
 
 function App() {
   const base_url = import.meta.env.VITE_BASE_URL;
-  useEffect(() => {
-    const auth = localStorage.getItem("auth");
-    console.log(auth);
-  }, []);
+  // useEffect(() => {
+  //   const auth = localStorage.getItem("auth");
+  //   console.log(auth);
+  // }, []);
 
   const handleLogin = async () => {
     try {
