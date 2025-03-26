@@ -8,12 +8,13 @@ const SigninGoogleButton = () => {
 
   const signinWithGoogle = async () => {
     try {
-      const BASE_URL = import.meta.env.BASE_URL;
+      const BASE_URL = import.meta.env.VITE_BASE_URL;
       const provider = new GoogleAuthProvider();
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
+      const url = `${BASE_URL}/api/auth/google`;
 
-      const res = await fetch(`${BASE_URL}/api/auth/google`, {
+      const res = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
