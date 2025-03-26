@@ -2,9 +2,12 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import app from "../config/firebase-config";
 import googleIcon from "../assets/google-icon.png";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../store/features/AuthSlice";
 
 const SigninGoogleButton = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const signinWithGoogle = async () => {
     try {
@@ -27,8 +30,9 @@ const SigninGoogleButton = () => {
         }),
       });
 
-      const data = await res.json();
-      console.log(data);
+      const { user, token } = await res.json();
+      dispatch(loginSuccess({ user, token }));
+      localStorage.setItem("token", JSON.stringify({ token }));
       navigate("/topics");
     } catch (error) {
       console.log(error.message);
