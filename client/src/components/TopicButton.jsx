@@ -2,6 +2,8 @@ import { Plus } from "lucide-react";
 import { useEffect } from "react";
 
 const TopicButton = ({ title, onClick, selectedTopics }) => {
+  console.log(selectedTopics);
+
   return (
     <div
       onClick={onClick}

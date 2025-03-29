@@ -11,7 +11,7 @@ const ActionButton = ({
       onClick={onClick}
       disabled={isDisabled}
       className={`"cursor-pointer flex justify-center items-center rounded-3xl ${
-        isDisabled ? "bg-gray-300 text-white" : "bg-black text-button-text"
+        !isDisabled ? "bg-gray-300 text-white" : "bg-black text-button-text"
       } "`}
       style={{
         height: `${height}px`,

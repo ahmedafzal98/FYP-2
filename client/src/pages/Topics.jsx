@@ -6,8 +6,24 @@ import { useEffect, useState } from "react";
 
 const Topics = () => {
   const [selectedTopics, setSelectedTopics] = useState([]);
+
   const handleTopicClick = (topic) => {
-    setSelectedTopics([...selectedTopics, topic]);
+    setSelectedTopics((prevTopics) => {
+      // Check if the topic is already in the selected topics array
+      const isAlreadySelected = prevTopics.some((t) => t.name === topic.name);
+
+      if (!isAlreadySelected) {
+        // If the topic is not in the list, add it with isSelected: true
+        return [...prevTopics, { ...topic, isSelected: true }];
+      }
+
+      // If the topic is already in the list, toggle isSelected and remove if false
+      return prevTopics
+        .map((t) =>
+          t.name === topic.name ? { ...t, isSelected: !t.isSelected } : t
+        )
+        .filter((t) => t.isSelected); // Remove items where isSelected becomes false
+    });
   };
 
   return (
@@ -29,7 +45,7 @@ const Topics = () => {
             topics.map((topic, index) => {
               return (
                 <TopicButton
-                  title={topic}
+                  title={topic.name}
                   onClick={() => handleTopicClick(topic)}
                   selectedTopics={selectedTopics}
                 />
@@ -42,7 +58,7 @@ const Topics = () => {
           title="Continue"
           height="38"
           width="238"
-          isDisabled={true}
+          isDisabled={selectedTopics.length > 2}
         />
       </div>
     </div>
