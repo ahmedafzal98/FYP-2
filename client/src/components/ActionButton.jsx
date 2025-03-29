@@ -1,8 +1,18 @@
-const ActionButton = ({ title, width, height, fontSize, onClick }) => {
+const ActionButton = ({
+  title,
+  width,
+  height,
+  fontSize,
+  onClick,
+  isDisabled,
+}) => {
   return (
-    <div
+    <button
       onClick={onClick}
-      className="cursor-pointer flex justify-center items-center rounded-3xl bg-black text-button-text"
+      disabled={isDisabled}
+      className={`"cursor-pointer flex justify-center items-center rounded-3xl ${
+        isDisabled ? "bg-gray-300 text-white" : "bg-black text-button-text"
+      } "`}
       style={{
         height: `${height}px`,
         width: `${width}px`,
@@ -10,7 +20,7 @@ const ActionButton = ({ title, width, height, fontSize, onClick }) => {
       }}
     >
       {title}
-    </div>
+    </button>
   );
 };
 export default ActionButton;
