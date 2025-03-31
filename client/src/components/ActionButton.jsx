@@ -5,14 +5,17 @@ const ActionButton = ({
   fontSize,
   onClick,
   isDisabled,
+  from,
 }) => {
   return (
     <button
       onClick={onClick}
-      disabled={isDisabled}
-      className={`"cursor-pointer flex justify-center items-center rounded-3xl ${
-        !isDisabled ? "bg-gray-300 text-white" : "bg-black text-button-text"
-      } "`}
+      disabled={from !== "Topics" ? isDisabled : false}
+      className={`cursor-pointer flex justify-center items-center rounded-3xl ${
+        !isDisabled && from === "Topics"
+          ? `bg-gray-300 text-white`
+          : `bg-black text-button-text`
+      }`}
       style={{
         height: `${height}px`,
         width: `${width}px`,

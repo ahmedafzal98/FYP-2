@@ -9,6 +9,7 @@ require("dotenv").config();
 
 const ArticleRouter = require("./router/ArticleRouter");
 const AuthRouter = require("./router/AuthRouter");
+const TopicsRouter = require("./router/TopicsRouter");
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 // app.use(passport.session());
 
 app.use("/api/articles", ArticleRouter);
+app.use("/api/topics", TopicsRouter);
 app.use("/api/auth", AuthRouter);
 
 const port = process.env.PORT || 3000;

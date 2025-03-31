@@ -6,14 +6,18 @@ const generateToken = (_id) => {
 };
 const googleAuth = async (req, res) => {
   const { uid, name, email, photoUrl } = req.body;
+  console.log(email);
 
   try {
     const user = await UserModel.findOne({ email });
-    const token = generateToken(user._id);
     if (user) {
+      let token = generateToken(user._id);
       res.status(200).json({ user, msg: "User already ", token });
     } else {
       const newUser = await UserModel.create({ uid, name, email, photoUrl });
+      token = generateToken(newUser._id);
+      console.log(newUser);
+
       await newUser.save();
       res
         .status(200)
@@ -21,6 +25,7 @@ const googleAuth = async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ error: error.message });
+    console.log(error.message);
   }
 };
 

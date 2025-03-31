@@ -12,8 +12,6 @@ const Home = () => {
     const token = localStorage.getItem("token");
     if (token) {
       const decode = jwtDecode(token);
-      console.log(decode);
-
       if (decode.exp * 1000 < Date.now()) {
         localStorage.removeItem("token");
         navigate("/");

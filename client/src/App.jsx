@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { loginSuccess } from "./store/features/AuthSlice";
 import PrivateRoutes from "./pages/PrivateRoutes";
+import Articles from "./pages/Articles";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
 
         <Route element={<PrivateRoutes />}>
           <Route path="/topics" element={<Topics />} />
+          <Route path="/articles" element={<Articles />} />
         </Route>
       </Routes>
     </BrowserRouter>
