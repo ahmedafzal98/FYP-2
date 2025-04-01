@@ -8,6 +8,7 @@ import { useNavigate } from "react-router";
 
 const Home = () => {
   const navigate = useNavigate();
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -16,11 +17,10 @@ const Home = () => {
         localStorage.removeItem("token");
         navigate("/");
       } else {
-        navigate("/topics");
+        navigate("/articles");
       }
     }
   }, [navigate]);
-
   return (
     <div className="overflow-hidden">
       <Navbar />

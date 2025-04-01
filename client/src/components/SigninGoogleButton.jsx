@@ -33,14 +33,15 @@ const SigninGoogleButton = () => {
       });
 
       const { user, token } = await res.json();
-      console.log(user.user);
 
       dispatch(loginSuccess({ user, token }));
-      localStorage.setItem(
-        "token",
-        JSON.stringify({ token, email: user.email })
-      );
-      navigate("/topics");
+      localStorage.setItem("token", JSON.stringify({ token }));
+      localStorage.setItem("topics", JSON.stringify({ topics: user.topics }));
+      if (user.topics.length === 0) {
+        navigate("/topics");
+      } else {
+        navigate("/articles");
+      }
     } catch (error) {
       console.log(error.message);
     }

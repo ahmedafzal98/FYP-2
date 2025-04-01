@@ -2,12 +2,17 @@ import { BrowserRouter, Route, Routes, useNavigate } from "react-router";
 import Home from "./pages/Home";
 import Topics from "./pages/Topics";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "./store/features/AuthSlice";
 import PrivateRoutes from "./pages/PrivateRoutes";
 import Articles from "./pages/Articles";
 
 function App() {
+  const topics = localStorage.getItem("topics");
+  // const { user } = useSelector((state) => state.auth);
+
+  console.log(topics.length === 0);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -15,6 +20,7 @@ function App() {
 
         <Route element={<PrivateRoutes />}>
           <Route path="/topics" element={<Topics />} />
+
           <Route path="/articles" element={<Articles />} />
         </Route>
       </Routes>
