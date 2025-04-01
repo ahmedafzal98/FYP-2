@@ -8,10 +8,8 @@ import PrivateRoutes from "./pages/PrivateRoutes";
 import Articles from "./pages/Articles";
 
 function App() {
-  const topics = localStorage.getItem("topics");
+  // const token = localStorage.getItem("token");
   // const { user } = useSelector((state) => state.auth);
-
-  console.log(topics.length === 0);
 
   return (
     <BrowserRouter>

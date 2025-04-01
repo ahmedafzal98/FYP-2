@@ -10,6 +10,8 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("home");
+    // localStorage.removeItem("token");
     const token = localStorage.getItem("token");
     if (token) {
       const decode = jwtDecode(token);
@@ -21,6 +23,7 @@ const Home = () => {
       }
     }
   }, [navigate]);
+
   return (
     <div className="overflow-hidden">
       <Navbar />
