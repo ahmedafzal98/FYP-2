@@ -4,8 +4,12 @@ import googleIcon from "../assets/google-icon.png";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "../store/features/AuthSlice";
+import authService from "../services/authService";
+import { useState } from "react";
+import Loader from "./Loader";
 
 const SigninGoogleButton = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -13,48 +17,50 @@ const SigninGoogleButton = () => {
 
   const signinWithGoogle = async () => {
     try {
-      const BASE_URL = import.meta.env.VITE_BASE_URL;
       const provider = new GoogleAuthProvider();
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
-      const url = `${BASE_URL}/api/auth/google`;
 
-      const res = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          uid: result.user.uid,
-          name: result.user.displayName,
-          email: result.user.email,
-          photoUrl: result.user.photoURL,
-        }),
-      });
+      const authData = {
+        uid: result.user.uid,
+        name: result.user.displayName,
+        email: result.user.email,
+        photoUrl: result.user.photoURL,
+      };
 
-      const { user, token } = await res.json();
+      setIsLoading(true);
+
+      const data = await authService("/api/auth/google", authData);
+
+      if (!data || !data.user || !data.token) {
+        console.error("Invalid API Response:", data);
+        return;
+      }
+
+      const { user, token } = data;
+
+      console.log(user);
 
       dispatch(loginSuccess({ user, token }));
       localStorage.setItem("token", JSON.stringify({ token }));
-      localStorage.setItem("topics", JSON.stringify({ topics: user.topics }));
-      if (user.topics.length === 0) {
-        navigate("/topics");
-      } else {
-        navigate("/articles");
-      }
+      setIsLoading(false);
+      navigate("/topics");
     } catch (error) {
       console.log(error.message);
     }
   };
   return (
-    <div
-      onClick={signinWithGoogle}
-      className="w-72 h-10 bg-white border rounded-3xl flex items-center cursor-pointer border-black"
-    >
-      <img src={googleIcon} alt="Google Icon" />
+    <>
+      {isLoading && <Loader />}
+      <div
+        onClick={signinWithGoogle}
+        className="w-72 h-10 bg-white border rounded-3xl flex items-center cursor-pointer border-black"
+      >
+        <img src={googleIcon} alt="Google Icon" />
 
-      <span className="w-full text-center">Sign up with Google</span>
-    </div>
+        <span className="w-full text-center">Sign up with Google</span>
+      </div>
+    </>
   );
 };
 

@@ -1,5 +1,7 @@
+import MainNavbar from "../components/MainNavbar";
+
 const Articles = () => {
-  return <h1 className="text-black">Articles</h1>;
+  return <MainNavbar />;
 };
 
 export default Articles;

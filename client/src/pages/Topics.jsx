@@ -2,52 +2,50 @@ import Seperator from "../components/Sepeartor";
 import TopicButton from "../components/TopicButton";
 import ActionButton from "../components/ActionButton";
 import { topics } from "../../data/topics";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import topicService from "../services/topicService";
+import Loader from "../components/Loader";
 
 const Topics = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedTopics, setSelectedTopics] = useState([]);
   const navigate = useNavigate();
 
   const user = useSelector((state) => state.auth.user);
+  const handleTopicClick = useCallback(
+    (topic) => {
+      setSelectedTopics((prevTopics) => {
+        const isAlreadySelected = prevTopics.some((t) => t.name === topic.name);
 
-  console.log(user);
-
-  const handleTopicClick = (topic) => {
-    setSelectedTopics((prevTopics) => {
-      const isAlreadySelected = prevTopics.some((t) => t.name === topic.name);
-
-      if (!isAlreadySelected) {
-        return [...prevTopics, { ...topic, isSelected: true }];
-      }
-      return prevTopics
-        .map((t) =>
-          t.name === topic.name ? { ...t, isSelected: !t.isSelected } : t
-        )
-        .filter((t) => t.isSelected); // Remove items where isSelected becomes false
-    });
-  };
+        if (!isAlreadySelected) {
+          return [...prevTopics, { ...topic, isSelected: true }];
+        }
+        return prevTopics
+          .map((t) =>
+            t.name === topic.name ? { ...t, isSelected: !t.isSelected } : t
+          )
+          .filter((t) => t.isSelected);
+      });
+    },
+    [selectedTopics]
+  );
 
   const handleContinueButton = async () => {
     if (selectedTopics.length > 2) {
       const topics = selectedTopics.map((topic) => topic.name);
-      try {
-        const BASE_URL = import.meta.env.VITE_BASE_URL;
-        const response = await fetch(`${BASE_URL}/api/topics`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ topics, id: user._id }),
-        });
 
-        const result = await response.json();
+      try {
+        setIsLoading(true);
+        const result = await topicService("/api/topics", topics, user._id);
         console.log(result);
 
-        if (result) {
-          navigate("/articles");
-        }
+        setIsLoading(false);
+        navigate("/articles");
       } catch (error) {
-        console.log(error.message);
+        setIsLoading(false);
+        console.error("Error sending topics:", error.message);
       }
     }
   };
@@ -65,6 +63,8 @@ const Topics = () => {
         </h2>
         <p className="text-textColor">Choose three or more.</p>
       </div>
+      {isLoading && <Loader />}
+
       <div className="mt-5 flex justify-center items-center">
         <div className="flex flex-wrap gap-6 w-7/10">
           {topics &&
