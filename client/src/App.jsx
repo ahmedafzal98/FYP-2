@@ -1,4 +1,10 @@
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router";
 import Home from "./pages/Home";
 import Topics from "./pages/Topics";
 import { useEffect } from "react";
@@ -8,6 +14,7 @@ import PrivateRoutes from "./pages/PrivateRoutes";
 import Articles from "./pages/Articles";
 import ArticleDetail from "./pages/ArticleDetail";
 import MainNavbar from "./components/MainNavbar";
+import WriteArticle from "./pages/WriteArticle";
 
 function App() {
   return (
@@ -20,6 +27,7 @@ function App() {
           <Route element={<MainNavbar />}>
             <Route path="/articles" element={<Articles />} />
             <Route path="/articleDetail" element={<ArticleDetail />} />
+            <Route path="/writeArticle" element={<WriteArticle />} />
           </Route>
         </Route>
       </Routes>
