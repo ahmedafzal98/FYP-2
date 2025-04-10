@@ -17,15 +17,21 @@ const ArticleSchema = mongoose.Schema(
     tags: {
       type: [String],
       validate: {
-        validator: (value) => {
-          return value.length >= 5;
+        validator: function (value) {
+          // Ensure that there are at least 2 tags in the array
+          return Array.isArray(value) && value.length >= 2;
         },
-        message: "You must provide atleast 5 tags",
+        message: "You must provide at least 2 tags",
       },
     },
-    image: {
+    author: {
       type: String,
-      required: [true, "Image is required"],
+      required: [true, "Author name is required"],
+    },
+    authorImageUrl: {
+      type: String,
+      // Optional image, so no need to make it required
+      // required: [true, "Image is required"],
     },
   },
   {

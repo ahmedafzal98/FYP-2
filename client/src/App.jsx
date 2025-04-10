@@ -26,7 +26,7 @@ function App() {
         <Route element={<PrivateRoutes />}>
           <Route element={<MainNavbar />}>
             <Route path="/articles" element={<Articles />} />
-            <Route path="/articleDetail" element={<ArticleDetail />} />
+            <Route path="/articleDetail/:id" element={<ArticleDetail />} />
             <Route path="/writeArticle" element={<WriteArticle />} />
           </Route>
         </Route>

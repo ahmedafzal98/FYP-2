@@ -17,7 +17,6 @@ const UserSchema = new mongoose.Schema(
     },
     photoUrl: {
       type: String,
-      default: "",
     },
     topics: {
       type: [String],

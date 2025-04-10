@@ -6,7 +6,7 @@ const generateToken = (_id) => {
 };
 const googleAuth = async (req, res) => {
   const { uid, name, email, photoUrl } = req.body;
-  console.log(email);
+  console.log(photoUrl);
 
   try {
     const user = await UserModel.findOne({ email });

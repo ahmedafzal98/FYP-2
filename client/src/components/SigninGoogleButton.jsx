@@ -32,14 +32,14 @@ const SigninGoogleButton = () => {
 
       const data = await authService("/api/auth/google", authData);
 
+      console.log(data);
+
       if (!data || !data.user || !data.token) {
         console.error("Invalid API Response:", data);
         return;
       }
 
       const { user, token } = data;
-
-      console.log(user);
 
       dispatch(loginSuccess({ user, token }));
       localStorage.setItem("token", JSON.stringify({ token }));
