@@ -3,9 +3,23 @@ from pydantic import BaseModel
 from pymongo import MongoClient
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from fastapi.middleware.cors import CORSMiddleware
 import re
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:5173/",             
+    "https://fyp-2-frontend.onrender.com",     
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 client = MongoClient('mongodb+srv://ahmedafzal:Ahmed123@backenddb.jxgs6.mongodb.net/Smart-News-Hub?retryWrites=true&w=majority&appName=BackendDb')
 db = client['Smart-News-Hub']
