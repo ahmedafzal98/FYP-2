@@ -62,8 +62,9 @@ def get_recommendations(request: RecommendRequest):
     recommendations = []
     for i, score in sim_scores:
         recommendations.append({
-            'title': clean_html(articles[i].get('title', '')),
-            'score': round(score, 2)
+     "id": str(articles[i].get("_id", "")),
+    "title": clean_html(articles[i].get("title", "")),
+    "score": round(score, 2)
         })
 
     return {
