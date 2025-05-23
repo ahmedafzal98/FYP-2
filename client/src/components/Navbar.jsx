@@ -28,15 +28,13 @@ const Navbar = () => {
           SmartNewsHub
         </div>
         <div className="flex items-center justify-evenly w-1/3">
-          {navOptions.map((item) => {
+          {navOptions.map((item, ind) => {
             return (
-              <>
-                <ul>
-                  <a onClick={() => setIsOpenModal(true)}>
-                    <li className="flex text-black cursor-pointer">{item}</li>
-                  </a>
-                </ul>
-              </>
+              <ul key={ind}>
+                <a onClick={() => setIsOpenModal(true)}>
+                  <li className="flex text-black cursor-pointer">{item}</li>
+                </a>
+              </ul>
             );
           })}
         </div>

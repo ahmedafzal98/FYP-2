@@ -31,8 +31,7 @@ const SigninGoogleButton = () => {
       setIsLoading(true);
 
       const data = await authService("/api/auth/google", authData);
-
-      console.log(data);
+      // console.log("server-response", data);
 
       if (!data || !data.user || !data.token) {
         console.error("Invalid API Response:", data);
@@ -40,7 +39,6 @@ const SigninGoogleButton = () => {
       }
 
       const { user, token } = data;
-
       dispatch(loginSuccess({ user, token }));
       localStorage.setItem("token", JSON.stringify({ token }));
       setIsLoading(false);
@@ -54,11 +52,13 @@ const SigninGoogleButton = () => {
       {isLoading && <Loader />}
       <div
         onClick={signinWithGoogle}
-        className="w-72 h-10 bg-white border rounded-3xl flex items-center cursor-pointer border-black"
+        className="w-72 h-10 bg-white border  rounded-3xl flex items-center cursor-pointer border-black"
       >
         <img src={googleIcon} alt="Google Icon" />
 
-        <span className="w-full text-center">Sign up with Google</span>
+        <span className="w-full text-center bg-red-400">
+          Sign up with Google
+        </span>
       </div>
     </>
   );

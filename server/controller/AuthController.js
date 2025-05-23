@@ -13,6 +13,7 @@ const googleAuth = async (req, res) => {
     if (user) {
       let token = generateToken(user._id);
       res.status(200).json({ user, msg: "User already ", token });
+      // res.JWT_SECRET(400).json({user, msg})
     } else {
       const newUser = await UserModel.create({ uid, name, email, photoUrl });
       token = generateToken(newUser._id);

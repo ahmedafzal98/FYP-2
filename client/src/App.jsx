@@ -11,8 +11,8 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginSuccess } from "./store/features/AuthSlice";
 import PrivateRoutes from "./pages/PrivateRoutes";
-import Articles from "./pages/Articles";
-import ArticleDetail from "./pages/ArticleDetail";
+import Articles from "./pages/Articles/index";
+import ArticleDetail from "./pages/Articles/Components/ArticleDetail";
 import MainNavbar from "./components/MainNavbar";
 import WriteArticle from "./pages/WriteArticle";
 

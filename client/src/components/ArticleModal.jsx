@@ -10,7 +10,7 @@ import { useNavigate } from "react-router";
 const ArticleModal = ({ isOpen, closeModal }) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const navigate = useNavigate;
+  const navigate = useNavigate();
 
   const { triggerSubmit, title, content, tags } = useSelector(
     (state) => state.articleEditor

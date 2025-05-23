@@ -11,6 +11,7 @@ import {
   setTriggerSubmit,
 } from "../store/features/ArticleEditorSlice";
 import ArticleModal from "./ArticleModal";
+import InputFields from "./InputFields";
 
 // Define a Media Node to handle images, videos, and files
 const MediaNode = Node.create({
@@ -66,7 +67,7 @@ const MediaNode = Node.create({
 
 const EditorLayout = () => {
   const [articleTitle, setArticleTitle] = useState("");
-  const [articleContent, setArticleContent] = useState("");
+  const [articleContent, setArticleContent] = useState([]);
   const [isFabExpanded, setIsFabExpanded] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]); // For images
   const [selectedVideos, setSelectedVideos] = useState([]); // For videos
@@ -235,6 +236,7 @@ const EditorLayout = () => {
 
       setArticleTitle(data.title);
       setArticleContent(data.content);
+      setAiTopic(" ");
 
       setIsGenerating(false);
     } catch (error) {
@@ -298,12 +300,12 @@ const EditorLayout = () => {
         </div>
 
         {/* AI Content Creation Section */}
-        <div className="my-4 p-4 border rounded-lg shadow-md bg-white">
+        <div className="my-4 p-4 border rounded-lg shadow-md">
           <h3 className="text-xl font-semibold mb-2">
             AI Content Creation Assistance
           </h3>
           <div className="flex flex-col gap-4">
-            <input
+            <InputFields
               type="text"
               value={aiTopic}
               onChange={(e) => setAiTopic(e.target.value)}
@@ -320,7 +322,6 @@ const EditorLayout = () => {
             </button>
           </div>
         </div>
-
         <div>
           <BubbleMenu editor={titleEditor} tippyOptions={{ duration: 100 }}>
             <div className="flex space-x-2 p-1">
@@ -371,7 +372,37 @@ const EditorLayout = () => {
               </button>
             </div>
           </BubbleMenu>
-          <EditorContent editor={contentEditor} className="min-h-[300px]" />
+          <EditorContent editor={titleEditor} />
+          {articleContent.length > 0 ? (
+            <>
+              <EditorContent editor={contentEditor} className="min-h-[300px]" />
+              <div className="my-4 p-4 border rounded-lg shadow-md">
+                <h3 className="text-xl font-semibold mb-2">
+                  AI Content Creation Assistance
+                </h3>
+                <div className="flex flex-col gap-4">
+                  <InputFields
+                    type="text"
+                    value={aiTopic}
+                    onChange={(e) => setAiTopic(e.target.value)}
+                    placeholder="Enter a topic for AI to generate content"
+                    className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <button
+                    onClick={handleGenerateContent}
+                    className="bg-blue-600 cursor-pointer text-white p-2 rounded-md hover:bg-blue-700 transition"
+                    disabled={isGenerating}
+                  >
+                    {isGenerating && <span>Generating...</span>}
+                    {isGenerating ? <Loader /> : "Generate Content"}
+                  </button>
+                </div>
+              </div>
+              <EditorContent editor={contentEditor} className="min-h-[300px]" />
+            </>
+          ) : (
+            <EditorContent editor={contentEditor} className="min-h-[300px]" />
+          )}
         </div>
       </div>
     </>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import { topics } from "../../data/topics"; // Assuming this is an array of topic objects
+import { topics } from "../data/DummyData"; // Assuming this is an array of topic objects
 import { useDispatch } from "react-redux";
 import {
   setArticleData,

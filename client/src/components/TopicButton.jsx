@@ -1,6 +1,6 @@
 import { Check, Plus } from "lucide-react";
 import { useEffect } from "react";
-import { topics } from "../../data/topics";
+import { topics } from "../data/DummyData";
 
 const TopicButton = ({ title, onClick, selectedTopics }) => {
   const isSelected = selectedTopics.some(

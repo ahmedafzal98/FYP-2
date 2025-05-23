@@ -18,6 +18,7 @@ const authService = async (endpoint, authData) => {
     });
     if (!res.ok) {
       const errorText = await res.text();
+      console.log("error", errorText);
       throw new Error(`Auth Failed: ${res.status} - ${errorText}`);
     }
     return await res.json();

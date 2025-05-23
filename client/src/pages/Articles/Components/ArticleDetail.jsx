@@ -5,24 +5,83 @@ import {
   Hand,
   MessageCircle,
 } from "lucide-react";
-import Seperator from "../components/Sepeartor";
-import ActionButton from "../components/ActionButton";
+import Seperator from "../../../components/Sepeartor";
+import ActionButton from "../../../components/ActionButton";
+import { useParams, useLocation } from "react-router";
+import { useEffect, useState } from "react";
+import Loader from "../../../components/Loader";
 import { useSelector } from "react-redux";
+import { Link } from "react-router";
+import { FaPlayCircle, FaStopCircle } from "react-icons/fa";
+import TextToSpeech from "../../../Hooks/TextToSpeech";
+// import { articles } from "../data/DummyData";
 
 const ArticleDetail = () => {
-  const article = useSelector((state) => state.articleEditor.detailArticle);
+  //Old-work
+  // const articles = useSelector((state) => state.articleEditor.detailArticle);
+  const { id } = useParams();
+  const location = useLocation();
+  const { index } = location.state || {};
+  console.log("index", index);
+  const [article, setArticle] = useState(null);
+  const [recommendations, setRecommendations] = useState([]);
+  const { isSpeaking, speak } = TextToSpeech();
 
-  console.log(article);
+  useEffect(() => {
+    const fetchArticleDetail = async () => {
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_BASE_URL}/api/articles/${id}`
+        );
+        if (!res.ok) throw new Error("Failed to fetch article");
+        const data = await res.json();
+        setArticle(data);
+      } catch (error) {
+        console.error("Error loading article:", err);
+      }
+    };
+    fetchArticleDetail();
+  }, [id]);
+
+  useEffect(() => {
+    if (index !== undefined) {
+      const payload = {
+        article_index: index,
+        top_n: 4,
+      };
+
+      console.log("Sending payload:", payload);
+
+      fetch("https://fyp-2-4w8r.onrender.com/recommend", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log("recommendation-data", data);
+          setRecommendations(data.recommendations || []);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch recommendations:", err);
+        });
+    }
+  }, [index]);
+
+  if (!article) return <Loader />;
 
   return (
-    <section className="">
-      <div className="flex flex-col items-center ">
+    <section className="md:w-[50%] w-[95%] mx-auto">
+      {/* Article Description  */}
+      <div className="flex flex-col">
         <span
-          className="text-[#242424] text-5xl font-bold w-1/2"
+          className="text-[#242424] text-5xl font-bold"
           dangerouslySetInnerHTML={{ __html: article.title }}
         ></span>
 
-        <div className="flex flex-col w-1/2 mt-[3%]">
+        <div className="flex flex-col mt-[3%]">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 cursor-pointer hover:opacity-50 rounded-full mt-2">
               <img
@@ -61,6 +120,13 @@ const ArticleDetail = () => {
                   <MessageCircle strokeWidth={1} />
                   <span className="text-black font-extralight">298</span>
                 </div>
+                <button onClick={() => speak(article.content)}>
+                  {isSpeaking ? (
+                    <FaStopCircle size={24} />
+                  ) : (
+                    <FaPlayCircle size={24} />
+                  )}
+                </button>
               </div>
               <div className="flex items-center gap-6 w-1/2">
                 <CircleMinus strokeWidth={1} />
@@ -71,7 +137,7 @@ const ArticleDetail = () => {
             <Seperator />
           </div>
         </div>
-        <div className="w-1/2 h-1/2 mt-[5%] flex flex-col items-center justify-center">
+        <div className="mt-[5%] flex flex-col">
           {/* <img
             src="https://miro.medium.com/v2/resize:fit:2000/format:webp/0*BwYfdzBCeWWX8NY7"
             alt="Article"
@@ -79,7 +145,7 @@ const ArticleDetail = () => {
           /> */}
           <div className="mt-5">
             <span
-              className="text-black text-2xl font-extralight font-sans leading-normal"
+              className="text-black text-[15px] sm:text-2xl font-sans leading-normal"
               dangerouslySetInnerHTML={{ __html: article.content }}
             ></span>
           </div>
@@ -138,6 +204,34 @@ const ArticleDetail = () => {
           <Seperator />
         </div>
       </div>
+      {/* Article Description  */}
+
+      {/* RecommendationArtilces */}
+      <div className="py-8">
+        <h2 className="text-xl font-semibold mb-6">
+          Recommended from Smart News Hub
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {recommendations.map((article, index) => (
+            <Link
+              to={`/articleDetail/${article.id}`}
+              key={article.id}
+              state={{ index: index }}
+              // state={{ index }}
+            >
+              <div key={article.id} className="flex flex-col gap-3">
+                <div className="text-sm text-gray-700">
+                  <h3 className="text-base font-bold text-gray-900 leading-snug mt-1">
+                    {article.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 mt-1">{article.title}</p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+      {/* RecommendationArtilces */}
     </section>
   );
 };

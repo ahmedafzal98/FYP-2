@@ -1,3 +1,5 @@
+import DummyImage from "../assets/images/dummyImg.png";
+
 export const topics = [
   { name: "Technology", isSelected: false },
   { name: "Programming", isSelected: false },
@@ -110,4 +112,54 @@ export const topics = [
   { name: "Artificial Creativity", isSelected: false },
   { name: "Future Trends", isSelected: false },
   { name: "Space Exploration", isSelected: false },
+];
+
+export const articles = [
+  {
+    id: 1,
+    image: DummyImage,
+    author: "Maxim Gorin",
+    title: "Stop Writing If-Else Trees: Use the State Pattern Instead",
+    description:
+      "Tired of messy conditionals? Learn how the State pattern makes your code cleaner...",
+    date: "Apr 10",
+    views: "2.8K",
+    comments: "58",
+  },
+  {
+    id: 2,
+    image: DummyImage,
+    author: "TheMindShift",
+    publisher: "In Let's Code Future",
+    title: "10 AI Tools That Replace a Full Dev Team (Almost)",
+    description:
+      "The future isn’t coming — it’s already here. And it’s writing your code, fixing bugs, and...",
+    date: "Apr 6",
+    views: "2.6K",
+    comments: "83",
+  },
+  {
+    id: 3,
+    image: DummyImage,
+    author: "TheMindShift",
+    publisher: "In Let's Code Future",
+    title: "10 AI Tools That Replace a Full Dev Team (Almost)",
+    description:
+      "The future isn’t coming — it’s already here. And it’s writing your code, fixing bugs, and...",
+    date: "Apr 6",
+    views: "2.6K",
+    comments: "83",
+  },
+  {
+    id: 4,
+    image: DummyImage,
+    author: "TheMindShift",
+    publisher: "In Let's Code Future",
+    title: "10 AI Tools That Replace a Full Dev Team (Almost)",
+    description:
+      "The future isn’t coming — it’s already here. And it’s writing your code, fixing bugs, and...",
+    date: "Apr 6",
+    views: "2.6K",
+    comments: "83",
+  },
 ];
