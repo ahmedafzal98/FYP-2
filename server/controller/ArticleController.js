@@ -196,26 +196,77 @@ const getAllArticles = async (req, res) => {
   }
 };
 
-const searchArticle = async (req, res) => {
+const timeMap = {
+  "past hour": "past_hour",
+  "past 24 hour": "past_24_hour",
+  "past week": "past_week",
+  "past year": "past_year",
+  anytime: "anytime",
+};
+
+const searchArticlesByTags = async (req, res) => {
   try {
-    const query = req.query.q?.trim() || "";
-    if (!query) {
-      return res.status(200).json([]);
+    let { tags, time } = req.query;
+
+    // Prepare the query object
+    const query = {};
+
+    // Handle time filter
+    if (time) {
+      time = timeMap[time.toLowerCase().trim()] || "anytime";
+
+      if (time !== "anytime") {
+        const now = new Date();
+        let fromDate;
+
+        switch (time) {
+          case "past_hour":
+            fromDate = new Date(now.getTime() - 60 * 60 * 1000);
+            break;
+          case "past_24_hour":
+            fromDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+            break;
+          case "past_week":
+            fromDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            break;
+          case "past_year":
+            fromDate = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+            break;
+          default:
+            return res.status(400).json({ message: "Invalid time filter" });
+        }
+
+        query.createdAt = { $gte: fromDate };
+      }
     }
 
-    const result = await Article.find({
-      $or: [
-        { title: { $regex: query, $options: "i" } },
-        { content: { $regex: query, $options: "i" } },
-        { tags: { $in: [new RegExp(query, "i")] } },
-        { author: { $regex: query, $options: "i" } },
-      ],
-    });
+    // Handle tags filter
+    if (tags) {
+      const tagArray = tags.split(",").map((tag) => tag.trim());
+      const regexTags = tagArray.map((tag) => ({
+        tags: { $regex: new RegExp(`^${tag}$`, "i") }, // case-insensitive
+      }));
+      query.$or = regexTags;
+    }
 
-    res.status(200).json(result);
+    // If no tags or time provided
+    if (!tags && !time) {
+      return res
+        .status(400)
+        .json({ message: "Please provide either tags or time filter" });
+    }
+
+    const articles = await Article.find(query);
+
+    if (articles.length === 0) {
+      return res.status(404).json({
+        message: "No articles found matching your criteria.",
+      });
+    }
+
+    res.json(articles);
   } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
 
@@ -226,5 +277,5 @@ module.exports = {
   getAllArticles,
   getArticle,
   AIContentCreation,
-  searchArticle,
+  searchArticlesByTags,
 };

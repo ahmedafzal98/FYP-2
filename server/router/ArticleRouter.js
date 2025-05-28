@@ -9,6 +9,7 @@ const {
   getAllArticles,
   AIContentCreation,
   searchArticle,
+  searchArticlesByTags,
 } = require("../controller/ArticleController");
 const router = express.Router();
 
@@ -24,7 +25,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.get("/", getAllArticles);
-router.get("/search", searchArticle);
+router.get("/search", searchArticlesByTags);
 router.get("/:id", getArticle);
 router.put("/:id", updateArticle);
 router.delete("/:id", deleteArticle);
