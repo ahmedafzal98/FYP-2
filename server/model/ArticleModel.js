@@ -12,7 +12,7 @@ const ArticleSchema = mongoose.Schema(
     },
     summary: {
       type: String,
-      required: [true, "Summary is required"],
+      required: [true, "Summary HGHJGHJ is required"],
     },
     tags: {
       type: [String],
