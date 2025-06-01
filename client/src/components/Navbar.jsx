@@ -1,11 +1,11 @@
 import ActionButton from "./ActionButton";
 import AuthModal from "../components/AuthModal";
 import { useState } from "react";
+import { Link } from "react-router";
 
 const Navbar = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const navOptions = [
-    <span className="hidden lg:block">Our Story</span>,
     <span className="hidden lg:block">Membership</span>,
     <span className="hidden lg:block">Write</span>,
     <span className="hidden lg:block">Sign in</span>,
@@ -28,6 +28,12 @@ const Navbar = () => {
           SmartNewsHub
         </div>
         <div className="flex items-center justify-evenly w-1/3">
+          <Link to="/about">
+            <span className="hidden lg:block cursor-pointer">About Us </span>
+          </Link>
+          <Link to="/contact">
+            <span className="hidden lg:block cursor-pointer">Contact Us </span>
+          </Link>
           {navOptions.map((item, ind) => {
             return (
               <ul key={ind}>

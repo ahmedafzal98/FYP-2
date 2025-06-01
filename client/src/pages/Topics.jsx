@@ -1,12 +1,12 @@
 import Seperator from "../components/Sepeartor";
 import TopicButton from "../components/TopicButton";
 import ActionButton from "../components/ActionButton";
-import topicService from "../services/topicService";
-import Loader from "../components/Loader";
 import { topics } from "../data/DummyData";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
+import topicService from "../services/topicService";
+import Loader from "../components/Loader";
 
 const Topics = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -14,6 +14,9 @@ const Topics = () => {
   const navigate = useNavigate();
 
   const user = useSelector((state) => state.auth.user);
+
+  console.log(user.uid);
+
   const handleTopicClick = useCallback(
     (topic) => {
       setSelectedTopics((prevTopics) => {
@@ -38,7 +41,7 @@ const Topics = () => {
 
       try {
         setIsLoading(true);
-        const result = await topicService("/api/topics", topics, user._id);
+        const result = await topicService("/api/topics", topics, user.uid);
         console.log(result);
 
         setIsLoading(false);
@@ -68,10 +71,9 @@ const Topics = () => {
       <div className="mt-5 flex justify-center items-center">
         <div className="flex flex-wrap gap-6 w-7/10">
           {topics &&
-            topics.map((topic, ind) => {
+            topics.map((topic) => {
               return (
                 <TopicButton
-                  key={ind}
                   title={topic.name}
                   onClick={() => handleTopicClick(topic)}
                   selectedTopics={selectedTopics}

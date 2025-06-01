@@ -1,24 +1,15 @@
-import {
-  BookmarkMinus,
-  CircleMinus,
-  Ellipsis,
-  Hand,
-  MessageCircle,
-} from "lucide-react";
+import { BookmarkMinus } from "lucide-react";
 import Seperator from "../../../components/Sepeartor";
 import ActionButton from "../../../components/ActionButton";
 import { useParams, useLocation } from "react-router";
 import { useEffect, useState } from "react";
 import Loader from "../../../components/Loader";
-import { useSelector } from "react-redux";
 import { Link } from "react-router";
 import { FaPlayCircle, FaStopCircle } from "react-icons/fa";
 import TextToSpeech from "../../../Hooks/TextToSpeech";
-// import { articles } from "../data/DummyData";
 
 const ArticleDetail = () => {
-  //Old-work
-  // const articles = useSelector((state) => state.articleEditor.detailArticle);
+
   const { id } = useParams();
   const location = useLocation();
   const { index } = location.state || {};
@@ -31,7 +22,11 @@ const ArticleDetail = () => {
     const fetchArticleDetail = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/api/articles/${id}`
+          `${import.meta.env.VITE_BASE_URL}/api/articles/${id}`,
+          {
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+          }
         );
         if (!res.ok) throw new Error("Failed to fetch article");
         const data = await res.json();
@@ -52,7 +47,7 @@ const ArticleDetail = () => {
 
       console.log("Sending payload:", payload);
 
-      fetch("https://fyp-2-4w8r.onrender.com/recommend", {
+      fetch("https://fyp-2-backend.onrender.com/recommend", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -76,13 +71,15 @@ const ArticleDetail = () => {
     <section className="md:w-[50%] w-[95%] mx-auto">
       {/* Article Description  */}
       <div className="flex flex-col">
+        {/* Article_Title */}
         <span
-          className="text-[#242424] text-5xl font-bold"
+          className="text-[#242424] text-5xl font-bold dark:text-white"
           dangerouslySetInnerHTML={{ __html: article.title }}
         ></span>
-
+        {/* Article_Title */}
         <div className="flex flex-col mt-[3%]">
           <div className="flex items-center gap-3">
+            {/* AuthorImg_AuthorName */}
             <div className="w-11 h-11 cursor-pointer hover:opacity-50 rounded-full mt-2">
               <img
                 src={article.authorImageUrl}
@@ -90,65 +87,47 @@ const ArticleDetail = () => {
                 className="rounded-full"
               />
             </div>
-            <div className="flex flex-col items-center">
-              <div className="flex w-full gap-4">
-                <span
-                  className="text-base font-light text-[#242424] cursor-pointer hover:underline"
-                  dangerouslySetInnerHTML={{ __html: article.author }}
-                ></span>
-
-                <span className="text-base font-light text-[#242424] cursor-pointer hover:underline">
-                  Follow
-                </span>
-              </div>
-              <div className="flex justify-between  w-full items-center gap-3">
-                <span className="text-[#6B6B6B]">12 min read</span>
-                <span className="text-[#6B6B6B]">3 days ago</span>
-              </div>
+            {/* AuthorImg_AuthorName */}
+            <div className="flex w-full gap-4">
+              <span
+                className="text-base font-light text-[#242424] cursor-pointer hover:underline dark:text-white"
+                dangerouslySetInnerHTML={{ __html: article.author }}
+              ></span>
             </div>
           </div>
+          {/* Voice_SaveArtcile */}
           <div className="gap-4 flex flex-col mt-[3%]">
             <Seperator />
-
-            <div className="flex items-center justify-between">
-              <div className="flex gap-6">
-                <div className="flex gap-1">
-                  <Hand strokeWidth={1} />
-                  <span className="text-black font-extralight">12K</span>
-                </div>
-                <div className="flex gap-1">
-                  <MessageCircle strokeWidth={1} />
-                  <span className="text-black font-extralight">298</span>
-                </div>
-                <button onClick={() => speak(article.content)}>
-                  {isSpeaking ? (
-                    <FaStopCircle size={24} />
-                  ) : (
-                    <FaPlayCircle size={24} />
-                  )}
-                </button>
-              </div>
-              <div className="flex items-center gap-6 w-1/2">
-                <CircleMinus strokeWidth={1} />
-                <BookmarkMinus strokeWidth={1} />
-                <Ellipsis strokeWidth={1} />
-              </div>
+            <div className="flex items-center gap-6">
+              <button
+                className="text-black dark:text-white"
+                onClick={() => speak(article.content)}
+              >
+                {isSpeaking ? (
+                  <FaStopCircle size={24} />
+                ) : (
+                  <FaPlayCircle size={24} />
+                )}
+              </button>
+              <BookmarkMinus
+                className="text-black dark:text-white"
+                strokeWidth={1}
+              />
             </div>
             <Seperator />
           </div>
+          {/* Voice_SaveArtcile */}
         </div>
         <div className="mt-[5%] flex flex-col">
-          {/* <img
-            src="https://miro.medium.com/v2/resize:fit:2000/format:webp/0*BwYfdzBCeWWX8NY7"
-            alt="Article"
-            className="w-full h-full object-contain"
-          /> */}
+          {/* Artcile_Content */}
           <div className="mt-5">
             <span
-              className="text-black text-[15px] sm:text-2xl font-sans leading-normal"
+              className="text-black text-[15px] sm:text-[16px] font-sans leading-normal dark:text-white"
               dangerouslySetInnerHTML={{ __html: article.content }}
             ></span>
           </div>
+          {/* Artcile_Content */}
+
           <div className="w-full mt-[3%] flex gap-3 flex-wrap">
             {article.tags &&
               article.tags.map((tag, index) => {
@@ -173,7 +152,7 @@ const ArticleDetail = () => {
               </div>
               <div className="flex flex-col items-center mt-3">
                 <div className="flex w-full gap-4">
-                  <span className="text-[#242424] font-normal ml-1 text-2xl cursor-pointer hover:underline">
+                  <span className="text-[#242424] font-normal ml-1 text-xl cursor-pointer hover:underline dark:text-white">
                     Written by
                     <span
                       className="ml-1"
@@ -181,25 +160,8 @@ const ArticleDetail = () => {
                     ></span>
                   </span>
                 </div>
-
-                <div className="flex justify-between  w-full items-center gap-3">
-                  <span className="text-[#6B6B6B] cursor-pointer hover:underline">
-                    147 Followers
-                  </span>
-                  <span className="text-[#6B6B6B] cursor-pointer hover:underline">
-                    6 Following
-                  </span>
-                </div>
               </div>
             </div>
-            <ActionButton title="Follow" height="38" width="74" />
-          </div>
-          <div className="mt-5 w-5/6 mb-[5%]">
-            <span>
-              I'm a senior software engineer specializing in Java Spring Boot
-              Microservices. I'm also a dedicated blogger at javadzone.com where
-              I share java/springboot, etc.
-            </span>
           </div>
           <Seperator />
         </div>
@@ -208,7 +170,7 @@ const ArticleDetail = () => {
 
       {/* RecommendationArtilces */}
       <div className="py-8">
-        <h2 className="text-xl font-semibold mb-6">
+        <h2 className="text-xl font-semibold mb-6 dark:text-white">
           Recommended from Smart News Hub
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -217,14 +179,15 @@ const ArticleDetail = () => {
               to={`/articleDetail/${article.id}`}
               key={article.id}
               state={{ index: index }}
-              // state={{ index }}
             >
               <div key={article.id} className="flex flex-col gap-3">
                 <div className="text-sm text-gray-700">
-                  <h3 className="text-base font-bold text-gray-900 leading-snug mt-1">
+                  <h3 className="text-base font-bold text-gray-900 leading-snug mt-1 dark:text-white">
                     {article.title}
                   </h3>
-                  <p className="text-sm text-gray-600 mt-1">{article.title}</p>
+                  <p className="text-sm text-gray-600 mt-1 dark:text-white">
+                    {article.title}
+                  </p>
                 </div>
               </div>
             </Link>

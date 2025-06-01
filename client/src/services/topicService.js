@@ -5,7 +5,8 @@ const topicService = async (endpoint, topics, id) => {
     const res = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ topics, id }),
+      credentials: "include",
+      body: JSON.stringify({ topics, uid: id }),
     });
 
     if (!res.ok) {

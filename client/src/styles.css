@@ -1,5 +1,21 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-bgContrast: ##66c8b6;
+}
+
+@layer theme {
+  .dark {
+    --color-bgContrast: #66c8b6;
+  }
+}
+
+@theme {
+  --font-family: "inter", "sans-serif";
+}
+
 @theme {
   --color-header: #f7f4ed;
   --color-black: rgba(25, 25, 25, 1);

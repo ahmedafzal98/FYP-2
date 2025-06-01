@@ -2,8 +2,15 @@ const Topics = require("../model/UserModel");
 
 const addTopics = async (req, res) => {
   try {
-    const { id, topics } = req.body;
-    const user = await Topics.findByIdAndUpdate(id, { topics }, { new: true });
+    const { uid, topics } = req.body;
+
+    console.log(uid);
+
+    const user = await Topics.findOneAndUpdate(
+      { uid },
+      { topics },
+      { new: true }
+    );
     if (!user) return res.status(404).json({ message: "User not found" });
     res.status(200).json({ msg: "Topics Added Successfully", user });
     console.log(user);

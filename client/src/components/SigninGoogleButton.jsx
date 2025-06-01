@@ -13,52 +13,46 @@ const SigninGoogleButton = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { user } = useSelector((state) => state.auth);
-
   const signinWithGoogle = async () => {
+    setIsLoading(true); // optional loading
     try {
       const provider = new GoogleAuthProvider();
       const auth = getAuth(app);
       const result = await signInWithPopup(auth, provider);
+      const token = await result.user.getIdToken();
+      console.log("token", token);
 
-      const authData = {
-        uid: result.user.uid,
-        name: result.user.displayName,
-        email: result.user.email,
-        photoUrl: result.user.photoURL,
-      };
+      const data = await authService("/api/auth/login", token);
+      console.log("data", data);
 
-      setIsLoading(true);
-
-      const data = await authService("/api/auth/google", authData);
-      // console.log("server-response", data);
-
-      if (!data || !data.user || !data.token) {
+      if (!data || !data.user) {
         console.error("Invalid API Response:", data);
         return;
       }
 
-      const { user, token } = data;
-      dispatch(loginSuccess({ user, token }));
-      localStorage.setItem("token", JSON.stringify({ token }));
-      setIsLoading(false);
-      navigate("/topics");
+      dispatch(loginSuccess(data));
+
+      if (data.isFirstLogin) {
+        navigate("/topics", { replace: true });
+      } else {
+        navigate("/articles", { replace: true });
+      }
     } catch (error) {
-      console.log(error.message);
+      console.error("Google Sign-in error:", error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
+
   return (
     <>
       {isLoading && <Loader />}
       <div
         onClick={signinWithGoogle}
-        className="w-72 h-10 bg-white border  rounded-3xl flex items-center cursor-pointer border-black"
+        className="w-72 h-10 bg-white border rounded-3xl flex items-center cursor-pointer border-black"
       >
         <img src={googleIcon} alt="Google Icon" />
-
-        <span className="w-full text-center bg-red-400">
-          Sign up with Google
-        </span>
+        <span className="w-full text-center">Sign up with Google</span>
       </div>
     </>
   );
